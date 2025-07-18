@@ -17,9 +17,15 @@ import {
 } from './store';
 
 // --- Access environment variables ---
-const BACKEND_PRODUCT_API_URL = process.env.BACKEND_PRODUCT_API_URL;
-const BACKEND_ORDER_API_URL = process.env.BACKEND_ORDER_API_URL;
-const MAX_PRODUCT_QUANTITY = parseInt(process.env.MAX_PRODUCT_QUANTITY) || 10;
+// Destructure the environment variables directly
+const {
+  VITE_BACKEND_PRODUCT_API_URL,
+  VITE_BACKEND_ORDER_API_URL, // Assuming you'll add this for the order service
+  VITE_MAX_PRODUCT_QUANTITY // Example for a third variable
+} = import.meta.env;
+const BACKEND_PRODUCT_API_URL = VITE_BACKEND_PRODUCT_API_URL;
+const BACKEND_ORDER_API_URL = VITE_BACKEND_ORDER_API_URL;
+const MAX_PRODUCT_QUANTITY = parseInt(VITE_MAX_PRODUCT_QUANTITY) || 10;
 
 // --- React Components ---
 
