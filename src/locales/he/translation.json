@@ -24,7 +24,7 @@
     "alertValidEmail": "אנא הזן כתובת אימייל חוקית.",
     "alertCartEmpty": "עגלת הקניות ריקה. אנא הוסף מוצרים לפני אישור ההזמנה.",
     "alertOrderPrepared": "ההזמנה נשלחה בהצלחה",
-    "alertOrderError": "שגיאה באישור ההזמנה. אנא נסה שוב.",
+    "alertOrderError": "שגיאה באישור ההזמנה. אנא נסו שוב.",
     "dialogAttentionProduct": "שימו לב !",
     "dialogProductEmptyMessage": "הקטגוריה, שם המוצר והכמות הם שדות חובה (הכמות מוגבלת ל-10 יחידות למוצר). יש להזין בהם נתונים חוקיים לפני שניתן יהיה להוסיף מוצר לעגלת הקניות",
     "dialogGotItProduct": "הבנתי",
@@ -40,5 +40,6 @@
     "summaryCategory": "קטגוריה",
     "summaryProduct": "מוצר",
     "summaryQuantity": "כמות",
-    "summaryNoItems": "אין פריטים בעגלה"
+    "summaryNoItems": "אין פריטים בעגלה",
+    "alertCategoriesError": "אירעה תקלה בעת שליפת הקטגוריות. נסו שוב מאוחר יותר"
 }

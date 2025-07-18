@@ -40,5 +40,6 @@
     "summaryCategory": "Category",
     "summaryProduct": "Product",
     "summaryQuantity": "Quantity",
-    "summaryNoItems": "No items in the cart."
+    "summaryNoItems": "No items in the cart.",
+    "alertCategoriesError": "Error while trying to fetch Categories. Please try again later."
 }

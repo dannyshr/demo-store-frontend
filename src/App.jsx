@@ -27,14 +27,14 @@ const BACKEND_PRODUCT_API_URL = VITE_BACKEND_PRODUCT_API_URL;
 const BACKEND_ORDER_API_URL = VITE_BACKEND_ORDER_API_URL;
 const MAX_PRODUCT_QUANTITY = parseInt(VITE_MAX_PRODUCT_QUANTITY) || 10;
 
-console.log('--- Debugging Environment Variables ---');
-console.log('VITE_BACKEND_PRODUCT_API_URL value:', VITE_BACKEND_PRODUCT_API_URL);
-console.log('VITE_BACKEND_ORDER_API_URL value:', VITE_BACKEND_ORDER_API_URL);
-console.log('VITE_MAX_PRODUCT_QUANTITY value:', VITE_MAX_PRODUCT_QUANTITY);
-console.log('BACKEND_PRODUCT_API_URL value:', BACKEND_PRODUCT_API_URL);
-console.log('BACKEND_ORDER_API_URL value:', BACKEND_ORDER_API_URL);
-console.log('MAX_PRODUCT_QUANTITY value:', MAX_PRODUCT_QUANTITY);
-console.log('--- End Debugging ---');
+// console.log('--- Debugging Environment Variables ---');
+// console.log('VITE_BACKEND_PRODUCT_API_URL value:', VITE_BACKEND_PRODUCT_API_URL);
+// console.log('VITE_BACKEND_ORDER_API_URL value:', VITE_BACKEND_ORDER_API_URL);
+// console.log('VITE_MAX_PRODUCT_QUANTITY value:', VITE_MAX_PRODUCT_QUANTITY);
+// console.log('BACKEND_PRODUCT_API_URL value:', BACKEND_PRODUCT_API_URL);
+// console.log('BACKEND_ORDER_API_URL value:', BACKEND_ORDER_API_URL);
+// console.log('MAX_PRODUCT_QUANTITY value:', MAX_PRODUCT_QUANTITY);
+// console.log('--- End Debugging ---');
 
 // --- React Components ---
 
@@ -319,7 +319,8 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
         const errorData = await response.json(); // Attempt to read error details from backend
         console.error('Backend Error Response:', errorData);
         message = `HTTP error! Status: ${response.status}, Message: ${errorData.message || response.statusText}`;
-        onShowMessage(dialogHeaderKey, message, dialogButtonTextKey, 'error');
+        console.error(message);
+        onShowMessage(dialogHeaderKey, t('alertOrderError'), dialogButtonTextKey, 'error');
       }
 
       const data = await response.json();
@@ -480,7 +481,8 @@ const App = () => {
 
           if (!response.ok) {
             let message = `HTTP error while fetching catefories ! status: ${response.status}`;
-            showMessageDialog('messageDialogGeneralHeader', message, 'messageDialogCloseButton', 'error');
+            console.log(message);
+            showMessageDialog('messageDialogGeneralHeader', t('alertCategoriesError'), 'messageDialogCloseButton', 'error');
             return;
           }
 
@@ -493,7 +495,8 @@ const App = () => {
         } 
         catch (error) {
           let message = 'Error fetching categories:' + error;
-          showMessageDialog('messageDialogGeneralHeader', message, 'messageDialogCloseButton', 'error');
+          console.log(message);
+          showMessageDialog('messageDialogGeneralHeader', t('alertCategoriesError'), 'messageDialogCloseButton', 'error');
         }
       };
 
