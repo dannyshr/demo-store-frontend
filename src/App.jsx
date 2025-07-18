@@ -27,6 +27,15 @@ const BACKEND_PRODUCT_API_URL = VITE_BACKEND_PRODUCT_API_URL;
 const BACKEND_ORDER_API_URL = VITE_BACKEND_ORDER_API_URL;
 const MAX_PRODUCT_QUANTITY = parseInt(VITE_MAX_PRODUCT_QUANTITY) || 10;
 
+console.log('--- Debugging Environment Variables ---');
+console.log('VITE_BACKEND_PRODUCT_API_URL value:', VITE_BACKEND_PRODUCT_API_URL);
+console.log('VITE_BACKEND_ORDER_API_URL value:', VITE_BACKEND_ORDER_API_URL);
+console.log('VITE_MAX_PRODUCT_QUANTITY value:', VITE_MAX_PRODUCT_QUANTITY);
+console.log('BACKEND_PRODUCT_API_URL value:', BACKEND_PRODUCT_API_URL);
+console.log('BACKEND_ORDER_API_URL value:', BACKEND_ORDER_API_URL);
+console.log('MAX_PRODUCT_QUANTITY value:', MAX_PRODUCT_QUANTITY);
+console.log('--- End Debugging ---');
+
 // --- React Components ---
 
 // Category Dropdown Component
