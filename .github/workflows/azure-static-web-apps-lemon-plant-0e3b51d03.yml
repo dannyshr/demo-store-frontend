@@ -45,16 +45,16 @@ jobs:
       - name: Install npm dependencies
         run: npm install --force # Added --force to ensure clean install, can remove if not needed
 
-      - name: Debug: List all environment variables before build
+      - name: Debug-List all environment variables before build
         run: env | sort
 
-      - name: Debug: List VITE_ prefixed environment variables before build
+      - name: Debug-List VITE_ prefixed environment variables before build
         run: env | grep VITE_ | sort
 
       - name: Build Frontend Application with Vite
         run: npm run build # This executes your Vite build command
 
-      - name: Debug: Verify build output directory content
+      - name: Debug-Verify build output directory content
         run: ls -R dist # List contents of the 'dist' folder to ensure build happened
 
       # --- Deploy using Azure Static Web Apps Deploy Action ---
