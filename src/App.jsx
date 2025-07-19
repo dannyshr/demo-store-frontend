@@ -143,7 +143,7 @@ const AddToCartButton = ({ onShowMessage }) => {
   return (
     <button
       onClick={handleAddToCartClick}
-      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105 md:w-auto mt-4 self-end max-w-md"
+      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105 mt-4 self-end w-fit"
     >
       {t('addToCart')}
     </button>
@@ -198,7 +198,7 @@ const ContinueButton = ({ onContinue, cart, onShowMessage }) => {
   return (
     <button
       onClick={handleContinueClick}
-      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-8 w-full max-w-md"
+      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-8 w-full w-fit"
     >
       {t('continueToOrder')}
     </button>
@@ -340,7 +340,6 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 font-['Inter'] w-full">
       <div className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-2xl mx-auto flex flex-col items-center" dir={t('dirAttValue')}>
         <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 text-center w-full">
           {t('orderConfirmation')}
@@ -436,7 +435,7 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
         {/* Confirm Order Button */}
         <button
           onClick={handleConfirmOrder}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-8 w-full max-w-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105 mt-8 w-full w-fit"
         >
           {t('confirmOrder')}
         </button>
@@ -444,12 +443,11 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
         {/* Back to Shopping Button */}
         <button
           onClick={onBackToShopping}
-          className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out mt-4 w-full max-w-md"
+          className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out mt-4 w-full w-fit"
         >
           {t('backToShopping')}
         </button>
       </div>
-    </div>
   );
 };
 
@@ -525,8 +523,12 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-['Inter'] w-full">
-        {/* Language Switcher */}
-        <div className="flex gap-2 mb-4 self-start relative">
+        {/* container for header row */}
+        <div className="rounded-lg flex items-center gap-x-[30px]">
+          {/* shoppingcart icon */}
+          <img src="/cart.svg" style={{width: "60px", height:"60px"}}/>
+
+          {/* Language Switcher */}
           <select 
             id="lang-select" 
             value={i18n.language} // Current language
