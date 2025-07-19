@@ -1,6 +1,6 @@
 # 🛍️ demo-store-frontend
-This repository contains the frontend application for the Demo Store, built with React and Vite. 
-It serves as the user interface for adding products to a shopping cart, and than sending it to the order service.
+This repository contains the frontend application for the Demo Store, built with React and Vite. It serves as the user interface for adding products to a shopping cart, and than sending it to the order service.
+
 Url: https://lemon-plant-0e3b51d03.1.azurestaticapps.net
 
 # ✨ Features
@@ -26,6 +26,7 @@ Git: Download & Install Git
 Clone the repository:
 
 git clone https://github.com/dannyshr/demo-store-frontend.git
+
 cd demo-store-frontend
 
 Install dependencies:
@@ -67,29 +68,42 @@ Trigger: The pipeline automatically triggers on pushes to the main branch and on
 
 Build: Node.js dependencies are installed, and the Vite application is built (npm run build). The compiled static assets are placed in the dist folder.
 
-Environment Variables: Crucially, environment variables (prefixed with VITE_) required by the frontend are injected directly into the GitHub Actions workflow's env block at the job level.
+### Environment Variables: Environment variables (prefixed with VITE_) required by the frontend are injected directly into the GitHub Actions workflow's env block at the job level.
 This ensures they are available during the Vite build process and embedded into the final JavaScript bundle.
 
 Deploy: The Azure/static-web-apps-deploy@v1 action uploads the contents of the dist folder to Azure Static Web Apps. Authentication is handled securely via OpenID Connect (OIDC).
 
-Environment Variables in Azure
-None required wince they are injected into GitHub
+### Environment Variables in Azure: Azure does NOT pass environment variables to the build process (done by GitHub) for static web applications.
 
 # 📂 Project Structure
 .
+
 ├── public/                # Static assets
+
 ├── src/                   # Source code
+
 │   ├── assets/
+
 │   ├── components/
+
 │   ├── App.jsx
+
 │   ├── main.jsx
+
 │   └── ...
+
 ├── .github/
+
 │   └── workflows/         # GitHub Actions workflow file
+
 ├── node_modules/
+
 ├── package.json
+
 ├── vite.config.js
+
 ├── .env.local             # Local environment variables (ignored by Git)
+
 └── README.md
 
 # 📄 License
