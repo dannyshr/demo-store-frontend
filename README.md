@@ -1,6 +1,7 @@
 🛍️ demo-store-frontend
 This repository contains the frontend application for the Demo Store, built with React and Vite. 
 It serves as the user interface for adding products to a shopping cart, and than sending it to the order service.
+Url: https://lemon-plant-0e3b51d03.1.azurestaticapps.net
 
 ✨ Features
 Category Browsing: Allows users to view all product categories.
