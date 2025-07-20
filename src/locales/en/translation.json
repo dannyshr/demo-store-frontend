@@ -41,5 +41,6 @@
     "summaryProduct": "Product",
     "summaryQuantity": "Quantity",
     "summaryNoItems": "No items in the cart.",
-    "alertCategoriesError": "Error while trying to fetch Categories. Please try again later."
+    "alertCategoriesError": "Error while trying to fetch Categories. Please try again later.",
+    "cartRemoveItemButtonTitle": "Click here to remove this item from the shopping cart"
 }

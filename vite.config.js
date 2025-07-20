@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-		  port: 3000,
+		  port: 3001,
       proxy: {
         // Proxy for /categories requests
         '/categories/api/Categories': {

@@ -2,41 +2,23 @@
 
 import { createStore, combineReducers } from 'redux';
 
-// --- Redux Actions ---
+// --- Actions for first screen ---
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_SELECTED_CATEGORY = 'SET_SELECTED_CATEGORY';
 export const SET_PRODUCT_NAME = 'SET_PRODUCT_NAME';
 export const SET_PRODUCT_QUANTITY = 'SET_PRODUCT_QUANTITY';
 export const ADD_TO_CART = 'ADD_TO_CART';
+export const UPDATE_CART_ITEM_QUANTITY = 'UPDATE_CART_ITEM_QUANTITY';
+export const REMOVE_CART_ITEM = 'REMOVE_CART_ITEM';
 export const CLEAR_CART = 'CLEAR_CART';
 
-// --- New Actions for Second Screen ---
+// --- Actions for second screen ---
 export const SET_FULL_NAME = 'SET_FULL_NAME';
 export const SET_FULL_ADDRESS = 'SET_FULL_ADDRESS';
 export const SET_EMAIL = 'SET_EMAIL';
 export const RESET_ORDER_FORM = 'RESET_ORDER_FORM'; // To clear the form after submission or navigation
 
-// --- New Action Creators ---
-export const setFullName = (name) => ({
-  type: SET_FULL_NAME,
-  payload: name,
-});
-
-export const setFullAddress = (address) => ({
-  type: SET_FULL_ADDRESS,
-  payload: address,
-});
-
-export const setEmail = (email) => ({
-  type: SET_EMAIL,
-  payload: email,
-});
-
-export const resetOrderForm = () => ({
-  type: RESET_ORDER_FORM,
-});
-
-// --- Existing Action Creators (for context, ensure they are still there) ---
+// --- Action Creators for the first screen ---
 export const setCategories = (categories) => ({
   type: SET_CATEGORIES,
   payload: categories,
@@ -66,6 +48,36 @@ export const clearCart = () => ({
   type: CLEAR_CART,
 });
 
+export const updateCartItemQuantity = (category, itemName, newQuantity) => ({
+  type: UPDATE_CART_ITEM_QUANTITY,
+  payload: { category, itemName, newQuantity },
+});
+
+export const removeCartItem = (category, itemName) => ({
+  type: REMOVE_CART_ITEM,
+  payload: { category, itemName },
+});
+
+// --- Action Creators for the second screen ---
+export const setFullName = (name) => ({
+  type: SET_FULL_NAME,
+  payload: name,
+});
+
+export const setFullAddress = (address) => ({
+  type: SET_FULL_ADDRESS,
+  payload: address,
+});
+
+export const setEmail = (email) => ({
+  type: SET_EMAIL,
+  payload: email,
+});
+
+export const resetOrderForm = () => ({
+  type: RESET_ORDER_FORM,
+});
+
 // --- Redux Reducers ---
 const initialProductsState = {
   categories: [],
@@ -73,7 +85,6 @@ const initialProductsState = {
   productName: '',
   productQuantity: 1,
   cart: {},
-  // --- New State for Second Screen ---
   fullName: '',
   fullAddress: '',
   email: '',
@@ -91,27 +102,26 @@ const productsReducer = (state = initialProductsState, action) => {
       return { ...state, productQuantity: action.payload };
     case ADD_TO_CART:
       const { category, name, quantity } = action.payload;
-      const updatedCart = { ...state.cart };
+      const updatedCartAdd = { ...state.cart };
 
-      if (!updatedCart[category]) {
-        updatedCart[category] = [];
+      if (!updatedCartAdd[category]) {
+        updatedCartAdd[category] = [];
       }
 
-      const existingItemIndex = updatedCart[category].findIndex(
+      const existingItemIndexAdd = updatedCartAdd[category].findIndex(
         (item) => item.name === name
       );
 
-      if (existingItemIndex > -1) {
-        updatedCart[category][existingItemIndex].quantity += quantity;
+      if (existingItemIndexAdd > -1) {
+        updatedCartAdd[category][existingItemIndexAdd].quantity += quantity;
       } else {
-        updatedCart[category].push({ name, quantity });
+        updatedCartAdd[category].push({ name, quantity });
       }
 
-      return { ...state, cart: updatedCart };
+      return { ...state, cart: updatedCartAdd };
     case CLEAR_CART:
       return { ...state, cart: {} };
 
-    // --- New Reducer Cases for Second Screen ---
     case SET_FULL_NAME:
       return { ...state, fullName: action.payload };
     case SET_FULL_ADDRESS:
@@ -125,6 +135,38 @@ const productsReducer = (state = initialProductsState, action) => {
         fullAddress: '',
         email: '',
       };
+    case UPDATE_CART_ITEM_QUANTITY:
+      const { category: updateCategory, itemName: updateItemName, newQuantity } = action.payload;
+      const updatedCartQuantity = { ...state.cart };
+
+      if (updatedCartQuantity[updateCategory]) {
+        const itemIndex = updatedCartQuantity[updateCategory].findIndex(item => item.name === updateItemName);
+        if (itemIndex > -1) {
+          if (newQuantity <= 0) {
+            // If new quantity is 0 or less, remove the item
+            updatedCartQuantity[updateCategory].splice(itemIndex, 1);
+            if (updatedCartQuantity[updateCategory].length === 0) {
+              delete updatedCartQuantity[updateCategory]; // Remove category if no items left
+            }
+          } 
+          else {
+            // Otherwise, update the quantity
+            updatedCartQuantity[updateCategory][itemIndex].quantity = newQuantity;
+          }
+        }
+      }
+      return { ...state, cart: updatedCartQuantity };
+    case REMOVE_CART_ITEM:
+      const { category: removeCategory, itemName: removeItemName } = action.payload;
+      const updatedCartRemove = { ...state.cart };
+
+      if (updatedCartRemove[removeCategory]) {
+        updatedCartRemove[removeCategory] = updatedCartRemove[removeCategory].filter(item => item.name !== removeItemName);
+        if (updatedCartRemove[removeCategory].length === 0) {
+          delete updatedCartRemove[removeCategory]; // Remove category if no items left
+        }
+      }
+      return { ...state, cart: updatedCartRemove };
     default:
       return state;
   }

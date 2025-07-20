@@ -14,6 +14,8 @@ import {
   setEmail,
   resetOrderForm,
   clearCart,
+  updateCartItemQuantity,
+  removeCartItem,
 } from './store';
 
 // --- Access environment variables ---
@@ -149,6 +151,23 @@ const AddToCartButton = ({ onShowMessage }) => {
 const ShoppingCart = () => {
   const { t } = useTranslation();
   const cart = useSelector((state) => state.products.cart);
+  const MAX_PRODUCT_QUANTITY = parseInt(import.meta.env.VITE_MAX_PRODUCT_QUANTITY) || 10; // Get max quantity
+
+  const dispatch = useDispatch(); // Get dispatch hook
+
+  // Handler for quantity change
+  const handleQuantityChange = (category, itemName, e) => {
+    const newQuantity = parseInt(e.target.value);
+    // Ensure newQuantity is a valid number and within reasonable bounds (e.g., at least 1)
+    if (!isNaN(newQuantity)) {
+      dispatch(updateCartItemQuantity(category, itemName, newQuantity));
+    }
+  };
+
+  // Handler for removing an item
+  const handleRemoveItem = (category, itemName) => {
+    dispatch(removeCartItem(category, itemName));
+  };
 
   return (
     <div className="w-full mt-8 p-4 bg-gray-50 rounded-lg shadow-inner border border-gray-200">
@@ -161,12 +180,30 @@ const ShoppingCart = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.entries(cart).map(([category, items]) => (
             <div key={category} className="bg-white p-4 rounded-lg shadow-md border border-gray-100">
-              <h4 className="font-bold text-lg text-blue-700 mb-2 text-right">{category}</h4>
+              <h4 className={`font-bold text-lg text-blue-700 mb-2 ${t('textAlignVal')}`}>{category}</h4>
               <ul className="list-none p-0 m-0" dir={t('dirAttValue')}>
                 {items.map((item, index) => (
-                  <li key={index} className={`flex justify-between items-center py-1 text-gray-700 ${t('textAlignVal')}`}>
-                    <span>{item.name}</span>
-                    <span className="font-medium text-gray-900"> – {item.quantity}</span>
+                  <li key={`${category}-${item.name}-${index}`} className={`flex justify-between items-center py-1 text-gray-700 ${t('textAlignVal')}`}>
+                    {/* Remove from Cart Button */}
+                    <button
+                      title={t('cartRemoveItemButtonTitle')}
+                      onClick={() => handleRemoveItem(category, item.name)}
+                      className="text-red-500 hover:text-red-700 text-sm font-bold p-1 rounded-full hover:bg-red-100 transition-colors duration-200 mr-2"
+                      aria-label={t('remove')} // Accessibility
+                    >
+                      &#x2715; {/* Unicode 'X' character for remove */}
+                    </button>
+                    <span className="flex-grow">{item.name}</span> {/* flex-grow to push quantity to the right */}
+                    {/* Quantity Input */}
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleQuantityChange(category, item.name, e)}
+                      min="1"
+                      max={MAX_PRODUCT_QUANTITY + 5} // Use the same max as product input
+                      className="w-16 text-center border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-900 ml-2"
+                      aria-label={t('quantity')} // Accessibility
+                    />
                   </li>
                 ))}
               </ul>
