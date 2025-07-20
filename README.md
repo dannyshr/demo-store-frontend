@@ -40,9 +40,11 @@ Create a .env.local file in the root of your project.
 This file will hold environment variables specific to your local setup.
 Place the following entries in the file:
 
-VITE_BACKEND_PRODUCT_API_URL=http://localhost:5000/api/Categories (Or your local .NET API URL)
-VITE_BACKEND_ORDER_API_URL=http://localhost:3001 (Or your local NestJS API URL)
 VITE_MAX_PRODUCT_QUANTITY=10
+
+VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
+
+VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
 
 ### Note: Variables prefixed with VITE_ are automatically exposed to your client-side code by Vite.
 
@@ -70,6 +72,14 @@ Build: Node.js dependencies are installed, and the Vite application is built (np
 
 ### Environment Variables: Environment variables (prefixed with VITE_) required by the frontend are injected directly into the GitHub Actions workflow's env block at the job level.
 This ensures they are available during the Vite build process and embedded into the final JavaScript bundle.
+
+These are the environment variables defined by the GitHub Actions pipeline:
+
+VITE_MAX_PRODUCT_QUANTITY=10
+
+VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
+
+VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
 
 Deploy: The Azure/static-web-apps-deploy@v1 action uploads the contents of the dist folder to Azure Static Web Apps. Authentication is handled securely via OpenID Connect (OIDC).
 
