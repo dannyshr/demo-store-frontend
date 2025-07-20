@@ -296,8 +296,8 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
       orderDate: new Date().toISOString(),
     };
 
-    let url = '/orders';
-    console.log('About to submit order=[' + orderData + '] to url=[' + url + ']');
+    let url = VITE_BACKEND_BASE_API_URL + '/orders/orders';
+    console.log('Before submitting to url=[' + url + '] the order=[' + orderData + ']');
 
     try {
       const response = await fetch(url, {
@@ -467,7 +467,7 @@ const App = () => {
     if (i18n.isInitialized && effectRan.current === false) {
       const fetchCategories = async () => {
         try {
-          let url = '/categories';
+          let url = VITE_BACKEND_BASE_API_URL + '/categories/api/Categories';
           console.log('Fetching categories from: ', url);
 
           const response = await fetch(url, {

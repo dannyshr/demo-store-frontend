@@ -20,7 +20,7 @@ jobs:
     # --- define env variables since Azure static web app, doesn't inject them ---
     env:
       VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
-      VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
+      VITE_APIM_SUBSCRIPTION_KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
       VITE_MAX_PRODUCT_QUANTITY: 10
     # --- END 'env' BLOCK ---
     steps:
@@ -57,6 +57,9 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+    permissions:
+      contents: none
+      pull-requests: write
     steps:
       - name: Close Pull Request
         id: closepullrequest
