@@ -44,7 +44,7 @@ VITE_MAX_PRODUCT_QUANTITY=10
 
 VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
 
-VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
+VITE_APIM_SUBSCRIPTION_KEY: 
 
 ### Note: Variables prefixed with VITE_ are automatically exposed to your client-side code by Vite.
 
@@ -79,7 +79,7 @@ VITE_MAX_PRODUCT_QUANTITY=10
 
 VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
 
-VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
+VITE_APIM_SUBSCRIPTION_KEY: 
 
 Deploy: The Azure/static-web-apps-deploy@v1 action uploads the contents of the dist folder to Azure Static Web Apps. Authentication is handled securely via OpenID Connect (OIDC).
 

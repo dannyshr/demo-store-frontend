@@ -7,11 +7,11 @@ export default defineConfig(({ mode }) => {
   // based on the current mode. The 'VITE_' prefix is important here.
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
-  // Ensure VITE_BACKEND_BASE_API_URL is available
-  const backendBaseApiUrl = env.VITE_BACKEND_BASE_API_URL;
+  // Ensure VITE_PROXY_BACKEND_BASE_API_URL is available
+  const backendBaseApiUrl = env.VITE_PROXY_BACKEND_BASE_API_URL;
 
   if (!backendBaseApiUrl || backendBaseApiUrl.trim()==='') {
-    console.error('VITE_BACKEND_BASE_API_URL is not set in your .env.development file !! Local proxy to APIM will not work !!');
+    console.error('VITE_PROXY_BACKEND_BASE_API_URL is not set in your .env.development file !! Local proxy to APIM will not work !!');
   } 
   else {
     console.log(`[Vite Proxy Setup] Configuring proxy to target Azure APIM: ${backendBaseApiUrl}`);
@@ -23,24 +23,24 @@ export default defineConfig(({ mode }) => {
 		  port: 3000,
       proxy: {
         // Proxy for /categories requests
-        '/categories': {
+        '/categories/api/Categories': {
           target: backendBaseApiUrl, // Your Azure APIM base URL
           changeOrigin: true, // Needed for virtual hosted sites (like Azure APIM)
           rewrite: (path) => {
-            const rewrittenPath = path.replace(/^\/categories/, '/categories/api/Categories');
-            console.log(`[Vite Proxy] Rewriting /categories to ${backendBaseApiUrl}${rewrittenPath}`);
+            const rewrittenPath = `${backendBaseApiUrl}/categories/api/Categories`;
+            console.log(`[Vite Proxy] Rewriting ${path} to ${rewrittenPath}`);
             return rewrittenPath;
           },
           secure: true, // Azure APIM uses HTTPS, so keep this true
           // logLevel: 'debug', // Uncomment for more detailed proxy logs in your terminal
         },
         // Proxy for /orders requests
-        '/orders': {
+        '/orders/orders': {
           target: backendBaseApiUrl, // Your Azure APIM base URL
           changeOrigin: true,
           rewrite: (path) => {
-            const rewrittenPath = path.replace(/^\/orders/, '/orders/orders');
-            console.log(`[Vite Proxy] Rewriting /orders to ${backendBaseApiUrl}${rewrittenPath}`);
+            const rewrittenPath = `${backendBaseApiUrl}/orders/orders`;
+            console.log(`[Vite Proxy] Rewriting ${path} to ${rewrittenPath}`);
             return rewrittenPath;
           },
           secure: true,
