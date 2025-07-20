@@ -41,5 +41,6 @@
     "summaryProduct": "מוצר",
     "summaryQuantity": "כמות",
     "summaryNoItems": "אין פריטים בעגלה",
-    "alertCategoriesError": "אירעה תקלה בעת שליפת הקטגוריות. נסו שוב מאוחר יותר"
+    "alertCategoriesError": "אירעה תקלה בעת שליפת הקטגוריות. נסו שוב מאוחר יותר",
+    "cartRemoveItemButtonTitle": "לחצ/י כאן בכדי להסיר את המוצר מעגלת הקניות"
 }
