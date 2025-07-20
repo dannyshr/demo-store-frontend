@@ -19,20 +19,15 @@ import {
 // --- Access environment variables ---
 // Destructure the environment variables directly
 const {
-  VITE_BACKEND_PRODUCT_API_URL,
-  VITE_BACKEND_ORDER_API_URL, // Assuming you'll add this for the order service
-  VITE_MAX_PRODUCT_QUANTITY // Example for a third variable
+  VITE_BACKEND_BASE_API_URL,
+  VITE_APIM_SUBSCRIPTION_KEY,
+  VITE_MAX_PRODUCT_QUANTITY
 } = import.meta.env;
-const BACKEND_PRODUCT_API_URL = VITE_BACKEND_PRODUCT_API_URL;
-const BACKEND_ORDER_API_URL = VITE_BACKEND_ORDER_API_URL;
-const MAX_PRODUCT_QUANTITY = parseInt(VITE_MAX_PRODUCT_QUANTITY) || 10;
-
+const MAX_PRODUCT_QUANTITY = parseInt(VITE_MAX_PRODUCT_QUANTITY, 10) || 10;
 // console.log('--- Debugging Environment Variables ---');
-// console.log('VITE_BACKEND_PRODUCT_API_URL value:', VITE_BACKEND_PRODUCT_API_URL);
-// console.log('VITE_BACKEND_ORDER_API_URL value:', VITE_BACKEND_ORDER_API_URL);
+console.log('VITE_BACKEND_BASE_API_URL value:', VITE_BACKEND_BASE_API_URL);
+// console.log('VITE_APIM_SUBSCRIPTION_KEY value:', VITE_APIM_SUBSCRIPTION_KEY);
 // console.log('VITE_MAX_PRODUCT_QUANTITY value:', VITE_MAX_PRODUCT_QUANTITY);
-// console.log('BACKEND_PRODUCT_API_URL value:', BACKEND_PRODUCT_API_URL);
-// console.log('BACKEND_ORDER_API_URL value:', BACKEND_ORDER_API_URL);
 // console.log('MAX_PRODUCT_QUANTITY value:', MAX_PRODUCT_QUANTITY);
 // console.log('--- End Debugging ---');
 
@@ -301,15 +296,15 @@ const OrderConfirmationForm = ({ onBackToShopping, onShowMessage, cart }) => {
       orderDate: new Date().toISOString(),
     };
 
-    let url = BACKEND_ORDER_API_URL;
-    console.log('About to submit order: ', orderData);
-    console.log('Url is: ', url);
+    let url = '/orders';
+    console.log('About to submit order=[' + orderData + '] to url=[' + url + ']');
 
     try {
-      const response = await fetch(`${url}/orders`, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Ocp-Apim-Subscription-Key': VITE_APIM_SUBSCRIPTION_KEY,
         },
         body: JSON.stringify(orderData),
       });
@@ -472,10 +467,14 @@ const App = () => {
     if (i18n.isInitialized && effectRan.current === false) {
       const fetchCategories = async () => {
         try {
-          let url = BACKEND_PRODUCT_API_URL;
+          let url = '/categories';
           console.log('Fetching categories from: ', url);
 
-          const response = await fetch(url);
+          const response = await fetch(url, {
+            headers: {
+              'Ocp-Apim-Subscription-Key': VITE_APIM_SUBSCRIPTION_KEY, // <-- ADD THIS HEADER
+            }},
+          );
 
           if (!response.ok) {
             let message = `HTTP error while fetching catefories ! status: ${response.status}`;

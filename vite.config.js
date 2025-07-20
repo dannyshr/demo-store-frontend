@@ -1,14 +1,52 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// vite.config.js
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  return {
-    plugins: [
-      react(),
-    ],
-    server: {
-      port: 3001,
-    }
+  // Load environment variables from .env.development (or .env.production etc.)
+  // based on the current mode. The 'VITE_' prefix is important here.
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+
+  // Ensure VITE_BACKEND_BASE_API_URL is available
+  const backendBaseApiUrl = env.VITE_BACKEND_BASE_API_URL;
+
+  if (!backendBaseApiUrl || backendBaseApiUrl.trim()==='') {
+    console.error('VITE_BACKEND_BASE_API_URL is not set in your .env.development file !! Local proxy to APIM will not work !!');
+  } 
+  else {
+    console.log(`[Vite Proxy Setup] Configuring proxy to target Azure APIM: ${backendBaseApiUrl}`);
   }
-})
+
+  return {
+    plugins: [react()],
+    server: {
+		  port: 3000,
+      proxy: {
+        // Proxy for /categories requests
+        '/categories': {
+          target: backendBaseApiUrl, // Your Azure APIM base URL
+          changeOrigin: true, // Needed for virtual hosted sites (like Azure APIM)
+          rewrite: (path) => {
+            const rewrittenPath = path.replace(/^\/categories/, '/categories/api/Categories');
+            console.log(`[Vite Proxy] Rewriting /categories to ${backendBaseApiUrl}${rewrittenPath}`);
+            return rewrittenPath;
+          },
+          secure: true, // Azure APIM uses HTTPS, so keep this true
+          // logLevel: 'debug', // Uncomment for more detailed proxy logs in your terminal
+        },
+        // Proxy for /orders requests
+        '/orders': {
+          target: backendBaseApiUrl, // Your Azure APIM base URL
+          changeOrigin: true,
+          rewrite: (path) => {
+            const rewrittenPath = path.replace(/^\/orders/, '/orders/orders');
+            console.log(`[Vite Proxy] Rewriting /orders to ${backendBaseApiUrl}${rewrittenPath}`);
+            return rewrittenPath;
+          },
+          secure: true,
+            logLevel: 'error',
+        },
+      },
+    },
+  };
+});

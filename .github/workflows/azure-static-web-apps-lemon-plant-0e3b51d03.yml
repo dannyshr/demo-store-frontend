@@ -19,8 +19,8 @@ jobs:
       contents: read
     # --- define env variables since Azure static web app, doesn't inject them ---
     env:
-      VITE_BACKEND_PRODUCT_API_URL: https://demostoreproductapi-dannys-gkg9eehhgjhaaab5.israelcentral-01.azurewebsites.net/api/Categories
-      VITE_BACKEND_ORDER_API_URL: https://demostoreorders-dannys-bfbreje3cnfgaubf.israelcentral-01.azurewebsites.net/orders
+      VITE_BACKEND_BASE_API_URL: https://demostore-apim.azure-api.net
+      VITE_APIM_SUBSCRIPTION_KEY: 4b5a45f0ed784cbda875def1d3284eb9
       VITE_MAX_PRODUCT_QUANTITY: 10
     # --- END 'env' BLOCK ---
     steps:
