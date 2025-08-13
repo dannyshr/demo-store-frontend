@@ -69,26 +69,90 @@ const CategoryDropdown = () => {
   );
 };
 
-// Product Input Component
-const ProductInput = () => {
+// Product Dropdown Component
+const ProductDropdown = ({ products }) => {
   const { t } = useTranslation();
   const productName = useSelector((state) => state.products.productName);
   const dispatch = useDispatch();
 
+  // Ensure a default product is selected if the current one is no longer in the list
+  useEffect(() => {
+    if (products.length > 0 && !products.find(p => p.name === productName)) {
+      dispatch(setProductName(products[0].name));
+    }
+  }, [products, productName, dispatch]);
+
+
   return (
-    <div className="flex flex-col items-end w-full max-w-xs md:max-w-md lg:max-w-lg">
-      <label htmlFor="product-name" className={`relative w-full ${t('textAlignVal')} text-gray-700 mb-1`}>
-        {t('productName')}
-      </label>
-      <input
-        type="text"
-        id="product-name"
-        className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${t('textAlignVal')}`}
+    <div className="relative w-full">
+      <select
+        id="product-select"
+        className={`block w-full px-4 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${t('textAlignVal')} pr-10 text-gray-900`}
         value={productName}
         onChange={(e) => dispatch(setProductName(e.target.value))}
-        placeholder={t('enterProductName')}
         dir={t('dirAttValue')}
+      >
+        {products.map((product) => (
+          <option key={product.id} value={product.name}>
+            {product.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+// Free Text Checkbox Component
+const FreeTextCheckbox = ({ isChecked, onToggle }) => {
+  const { t } = useTranslation();
+  const marginAlign = (t('dirAttValue') === 'rtl' ? 'mr-2' : 'ml-2' );
+
+  return (
+    <div className={`flex items-center justify-start w-full mb-4`} style={ { direction: t('dirAttValue') }}>
+      <input
+        type="checkbox"
+        id="free-text-checkbox"
+        title={`${t('freeProdNameCheckboxTooltip')}`}
+        checked={isChecked}
+        onChange={onToggle}
+        className="form-checkbox h-5 w-5 text-blue-600 rounded"
       />
+      <label htmlFor="free-text-checkbox" className={`text-gray-700 ${marginAlign} ${t('textAlignVal')}`} title={`${t('freeProdNameCheckboxTooltip')}`}>
+        {t('freeTextProductLabel')}
+      </label>
+    </div>
+  );
+};
+
+// Product Input Component
+const ProductInput = ({ isFreeTextMode, setIsFreeTextMode, productsInSelectedCategory }) => {
+  const { t } = useTranslation();
+  const productName = useSelector((state) => state.products.productName);
+  const dispatch = useDispatch();
+
+  const handleFreeTextChange = (e) => {
+    dispatch(setProductName(e.target.value));
+  };
+
+  const shouldShowFreeText = isFreeTextMode || productsInSelectedCategory.length === 0;
+
+  return (
+    <div className="flex flex-col items-end w-full max-w-xs md:max-w-md lg:max-w-lg">
+      {/* The checkbox will always be shown */}
+      <FreeTextCheckbox isChecked={isFreeTextMode} onToggle={() => setIsFreeTextMode(!isFreeTextMode)}/>
+      {shouldShowFreeText ? (
+        <input
+          type="text"
+          id="product-name"
+          className={`block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${t('textAlignVal')}`}
+          value={productName}
+          onChange={handleFreeTextChange}
+          placeholder={t('enterProductName')}
+          dir={t('dirAttValue')}
+        />
+      ) : (
+        <ProductDropdown products={productsInSelectedCategory} />
+      )}
     </div>
   );
 };
@@ -496,7 +560,10 @@ const App = () => {
     closeButtonText: '',
     severity: 'info',
   });
+  const categories = useSelector((state) => state.products.categories);
+  const selectedCategoryName = useSelector((state) => state.products.selectedCategory);
   const cart = useSelector((state) => state.products.cart);
+  const [isFreeTextMode, setIsFreeTextMode] = useState(false);
 
   const effectRan = useRef(false);
 
@@ -523,8 +590,18 @@ const App = () => {
           const data = await response.json();
           dispatch(setCategories(data));
           if (data.length > 0) {
-            //select the first value
-            //dispatch(setSelectedCategory(data[0].name));
+            /*
+            const firstCategory = data[0];
+            dispatch(setSelectedCategory(firstCategory.name));
+
+            // If the first category has products, select the first one. Otherwise, clear the product name.
+            if (firstCategory.products.length > 0) {
+              dispatch(setProductName(firstCategory.products[0].name));
+            } 
+            else {
+              dispatch(setProductName(''));
+            }
+            */
           }
         } 
         catch (error) {
@@ -556,6 +633,24 @@ const App = () => {
   const changeLanguage = (e) => {
     i18n.changeLanguage(e.target.value);
   };
+
+  // Handler for when the category changes
+  const handleCategoryChange = (newCategoryName) => {
+    const selectedCategory = categories.find(c => c.name === newCategoryName);
+    if (selectedCategory && selectedCategory.products.length > 0) {
+      // If the new category has products, set the product name to the first product's name
+      dispatch(setProductName(selectedCategory.products[0].name));
+      // And turn off free-text mode
+      setIsFreeTextMode(false);
+    } 
+    else {
+      // If no products, set product name to an empty string and force free-text mode
+      dispatch(setProductName(''));
+      setIsFreeTextMode(true);
+    }
+  };
+
+  const productsInSelectedCategory = categories.find(c => c.name === selectedCategoryName)?.products || [];
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-['Inter'] w-full">
@@ -592,7 +687,12 @@ const App = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-1 gap-6 w-full mb-8">
               <CategoryDropdown />
-              <ProductInput />
+              {/* Pass isFreeTextMode and productsInSelectedCategory as props */}
+              <ProductInput
+                isFreeTextMode={isFreeTextMode}
+                setIsFreeTextMode={setIsFreeTextMode}
+                productsInSelectedCategory={productsInSelectedCategory}
+              />
               <QuantityInput />
               <AddToCartButton onShowMessage={showMessageDialog} />
             </div>
