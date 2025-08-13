@@ -42,5 +42,7 @@
     "summaryQuantity": "כמות",
     "summaryNoItems": "אין פריטים בעגלה",
     "alertCategoriesError": "אירעה תקלה בעת שליפת הקטגוריות. נסו שוב מאוחר יותר",
-    "cartRemoveItemButtonTitle": "לחצ/י כאן בכדי להסיר את המוצר מעגלת הקניות"
+    "cartRemoveItemButtonTitle": "לחצ/י כאן בכדי להסיר את המוצר מעגלת הקניות",
+    "freeProdNameCheckboxTooltip": "לחצ/י כאן בכדי להזין שם מוצר חופשי, או נקי/ה בחירה בכדי לבחור מוצר מהרשימה",
+    "freeTextProductLabel": "שם מוצר: "
 }

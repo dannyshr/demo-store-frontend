@@ -42,5 +42,7 @@
     "summaryQuantity": "Quantity",
     "summaryNoItems": "No items in the cart.",
     "alertCategoriesError": "Error while trying to fetch Categories. Please try again later.",
-    "cartRemoveItemButtonTitle": "Click here to remove this item from the shopping cart"
+    "cartRemoveItemButtonTitle": "Click here to remove this item from the shopping cart",
+    "freeProdNameCheckboxTooltip": "Check this box to enter a free text product name, or uncheck to select a product from the list",
+    "freeTextProductLabel": "Product Name: "
 }
